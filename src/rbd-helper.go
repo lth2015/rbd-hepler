@@ -7,6 +7,35 @@ import (
 	"strings"
 )
 
+func CreateImage(rbd string, size uint32, pool string) {
+
+}
+
+
+func MapImage(rbd string) {
+
+}
+
+func ShowMappedImage(rbd string) {
+
+}
+
+func ShowMappedAllIamges(rbd string) {
+
+}
+
+func UnmapImage(path string) {
+
+}
+
+func MakeFileSystem(fs string) {
+
+}
+
+func DeleteImage(rbd string) {
+
+}
+
 func main() {
 
 	// rbd command
