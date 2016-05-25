@@ -6,28 +6,28 @@ RBD命令辅助工具
 
 在使用Kubernetes和Ceph RBD构建容器云应用时,创建RBD操作一般要经过如下几个步骤:
 
-1. 创建RBD块设备
+##### 1.  创建RBD块设备
 ```bash
 rbd create temp -s 1024 -p rbd
 ```
 
-2. 映射RBD块设备
+##### 2. 映射RBD块设备
 ```bash
 rbd map temp
 ```
 
-3. 查看映射的设备路径
+##### 3. 查看映射的设备路径
 ```bash
 rbd showmapped | grep temp
 /dev/rbd1
 ```
 
-4. 格式化块设备
+##### 4. 格式化块设备
 ```bash
 mkfs.ext4 /dev/rbd1
 ```
 
-5. 取消映射
+##### 5. 取消映射
 ```bash
 rbd unmap /dev/rbd1
 ```
