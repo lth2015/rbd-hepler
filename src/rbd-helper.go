@@ -47,7 +47,7 @@ func MapImage(rbd string) {
 	fmt.Printf("The result is %s\n", out)
 }
 
-func ShowMappedImage(rbd string) {
+func ShowMappedImage(rbd string) string {
 
 	fmt.Println("Show mapped a given image\n")
 
@@ -83,8 +83,6 @@ func ShowMappedImage(rbd string) {
 	w.Close()
 	grep_out.Wait()
 
-	// io.Copy(os.Stdout, &b2)
-
 	buffer := b2.String()
 	buffer = strings.Trim(buffer, " \n\t")
 	for {
@@ -99,23 +97,84 @@ func ShowMappedImage(rbd string) {
 
 	path := paths[len(paths)-1]
 
+	return path
 
 }
 
-func ShowMappedAllIamges(rbd string) {
+func ShowMappedAllIamges() {
 
+	fmt.Println("Show all rbd blocks mapped\n")
+
+	// Exec create command
+	cmd := "rbd showmapped"
+
+	parts := strings.Fields(cmd)
+	head := parts[0]
+	parts = parts[1:len(parts)]
+
+	out, err := exec.Command(head, parts...).Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("%s\n", out)
 }
 
 func UnmapImage(path string) {
 
+	fmt.Println("Unmapped the block: path=%s\n", path)
+
+	// Exec create command
+	cmd := "rbd unmapped " + path
+
+	parts := strings.Fields(cmd)
+	head := parts[0]
+	parts = parts[1:len(parts)]
+
+	out, err := exec.Command(head, parts...).Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("%s\n", out)
 }
 
-func MakeFileSystem(fs string) {
+func MakeFileSystem(fs, path string) {
 
+	fmt.Println("Format the block device: fs=%s, path=%s\n", fs, path)
+
+	// Exec create command
+	cmd := "mkfs." + fs + " " + path
+
+	parts := strings.Fields(cmd)
+	head := parts[0]
+	parts = parts[1:len(parts)]
+
+	out, err := exec.Command(head, parts...).Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("%s\n", out)
 }
 
 func DeleteImage(rbd string) {
 
+	fmt.Println("Delete the block: rbd=%s\n", rbd)
+
+	// Exec create command
+	cmd := "rbd unmapped " + rbd
+
+	parts := strings.Fields(cmd)
+	head := parts[0]
+	parts = parts[1:len(parts)]
+
+	out, err := exec.Command(head, parts...).Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("%s\n", out)
 }
 
 func main() {
