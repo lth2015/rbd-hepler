@@ -25,17 +25,22 @@ func main() {
 				cli.StringFlag{
 					Name:  "name, n",
 					Value: "rbd",
-					Usage: "set the name of rbd block",
+					Usage: "set the name of the rbd block",
 				},
 				cli.StringFlag{
 					Name:  "size, s",
 					Value: "10240",
-					Usage: "set the size of rbd block",
+					Usage: "set the size of the rbd block",
 				},
 				cli.StringFlag{
 					Name:  "filesystem, f",
 					Value: "ext4",
-					Usage: "set the filesystem of rbd block",
+					Usage: "set the filesystem of the rbd block",
+				},
+				cli.StringFlag{
+					Name:  "pool, p",
+					Value: "rbd",
+					Usage: "set the pool of the rbd block",
 				},
 			},
 			Action: func(c *cli.Context) error {
