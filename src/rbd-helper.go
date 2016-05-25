@@ -1,15 +1,20 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"github.com/urfave/cli"
+	"io"
 	"log"
+	"os"
 	"os/exec"
 	"strings"
 )
 
 func CreateImage(rbd string, size string, pool string) {
 
-	fmt.Println("\nCreate a RBD image: name=%s, size=%s, pool=%s\n", rbd, size, pool)
+	fmt.Printf("\nCreate a RBD image: name=%s, size=%s, pool=%s\n", rbd, size, pool)
+	fmt.Println("==========================================================================")
 
 	// Exec create command
 	cmd := "rbd create " + rbd + " -s " + size + " -p " + pool
@@ -24,13 +29,13 @@ func CreateImage(rbd string, size string, pool string) {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("The result is %s\n", out)
+	fmt.Printf("%s\n", out)
 }
-
 
 func MapImage(rbd string) {
 
-	fmt.Println("\nMap a RBD image: name=%s", rbd)
+	fmt.Printf("\nMap a RBD image: name=%s", rbd)
+	fmt.Println("==========================================================================")
 
 	// Exec map command
 	cmd := "rbd map " + rbd
@@ -49,7 +54,8 @@ func MapImage(rbd string) {
 
 func ShowMappedImage(rbd string) string {
 
-	fmt.Println("Show mapped a given image\n")
+	fmt.Printf("Show mapped a given image\n")
+	fmt.Println("==========================================================================")
 
 	// Exec map command
 	rbd_cmd := "rbd showmapped "
@@ -103,7 +109,8 @@ func ShowMappedImage(rbd string) string {
 
 func ShowMappedAllIamges() {
 
-	fmt.Println("Show all rbd blocks mapped\n")
+	fmt.Printf("Show all rbd blocks mapped\n")
+	fmt.Println("==========================================================================")
 
 	// Exec create command
 	cmd := "rbd showmapped"
@@ -122,10 +129,10 @@ func ShowMappedAllIamges() {
 
 func UnmapImage(path string) {
 
-	fmt.Println("Unmapped the block: path=%s\n", path)
+	fmt.Printf("Unmapped the block: path=%s\n", path)
 
 	// Exec create command
-	cmd := "rbd unmapped " + path
+	cmd := "rbd unmap " + path
 
 	parts := strings.Fields(cmd)
 	head := parts[0]
@@ -141,7 +148,8 @@ func UnmapImage(path string) {
 
 func MakeFileSystem(fs, path string) {
 
-	fmt.Println("Format the block device: fs=%s, path=%s\n", fs, path)
+	fmt.Printf("Format the block device: fs=%s, path=%s\n", fs, path)
+	fmt.Println("==========================================================================")
 
 	// Exec create command
 	cmd := "mkfs." + fs + " " + path
@@ -160,10 +168,11 @@ func MakeFileSystem(fs, path string) {
 
 func DeleteImage(rbd string) {
 
-	fmt.Println("Delete the block: rbd=%s\n", rbd)
+	fmt.Printf("Delete the block: rbd=%s\n", rbd)
+	fmt.Println("==========================================================================")
 
 	// Exec create command
-	cmd := "rbd unmapped " + rbd
+	cmd := "rbd rm " + rbd
 
 	parts := strings.Fields(cmd)
 	head := parts[0]
@@ -179,19 +188,92 @@ func DeleteImage(rbd string) {
 
 func main() {
 
-	// rbd command
-	// cmd := "rbd create ttt -s 1024"
-	cmd := "rbd showmapped"
+	app := cli.NewApp()
 
-	parts := strings.Fields(cmd)
-	head := parts[0]
-	parts = parts[1:len(parts)]
+	app.Name = "rbd"
 
-	out, err := exec.Command(head, parts...).Output()
-	if err != nil {
-		log.Fatal(err)
+	app.Usage = "Used to create, format, delete a rbd image!"
+
+	app.Version = "0.1.0"
+
+	app.Commands = []cli.Command{
+		{
+			Name:    "create",
+			Aliases: []string{"a"},
+			Usage:   "Create a given-size block and format it using a given filesystem",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "name, n",
+					Value: "rbd",
+					Usage: "set the name of the rbd block",
+				},
+				cli.StringFlag{
+					Name:  "size, s",
+					Value: "10240",
+					Usage: "set the size of the rbd block",
+				},
+				cli.StringFlag{
+					Name:  "filesystem, f",
+					Value: "ext4",
+					Usage: "set the filesystem of the rbd block",
+				},
+				cli.StringFlag{
+					Name:  "pool, p",
+					Value: "rbd",
+					Usage: "set the pool of the rbd block",
+				},
+			},
+			Action: func(c *cli.Context) error {
+
+				// Print the value of name option
+				name := c.String("name")
+				size := c.String("size")
+				pool := c.String("pool")
+				fs := c.String("filesystem")
+				fmt.Println("Name Option: ", c.String("name"))
+				fmt.Println("Size Option: ", c.String("size"))
+				fmt.Println("Filesystem Option: ", c.String("filesystem"))
+
+				// Create rbd
+				CreateImage(name, size, pool)
+				MapImage(name)
+				path := ShowMappedImage(name)
+				MakeFileSystem(fs, path)
+				UnmapImage(path)
+
+				fmt.Println("RBD is created successfully!")
+
+				return nil
+			},
+		},
+		{
+			Name:    "show",
+			Aliases: []string{"s"},
+			Usage:   "Show blocks mapped",
+			Action: func(c *cli.Context) error {
+				ShowMappedAllIamges()
+				return nil
+			},
+		},
+		{
+			Name:    "delete",
+			Aliases: []string{"d"},
+			Usage:   "Delete a rbd block",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "name, n",
+					Value: "rbd",
+					Usage: "set the name of the rbd block",
+				},
+			},
+			Action: func(c *cli.Context) error {
+				name := c.String("name")
+				DeleteImage(name)
+				return nil
+			},
+		},
 	}
 
-	fmt.Printf("The result is %s\n", out)
+	app.Run(os.Args)
 }
 

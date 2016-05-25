@@ -1,0 +1,30 @@
+<component name="libraryTable">
+  <library name="GOPATH &lt;rbd-hepler&gt;">
+    <CLASSES>
+      <root url="file://$USER_HOME$/Go/src/gopkg.in" />
+      <root url="file://$USER_HOME$/Go/src/github.com" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <excluded>
+      <root url="file://$USER_HOME$/Go/src/github.com/tools/godep/Godeps/_workspace" />
+      <root url="file://$USER_HOME$/Go/src/github.com/smartystreets/go-disruptor/.git" />
+      <root url="file://$USER_HOME$/Go/src/github.com/jsimnz/martini-contrib/.git" />
+      <root url="file://$PROJECT_DIR$" />
+      <root url="file://$USER_HOME$/Go/src/github.com/creack/goproxy/.git" />
+      <root url="file://$USER_HOME$/Go/src/github.com/vulcand/vulcand/Godeps/_workspace" />
+      <root url="file://$USER_HOME$/Go/src/github.com/codegangsta/inject/.git" />
+      <root url="file://$USER_HOME$/Go/src/github.com/coreos/etcd/integration/testdata" />
+      <root url="file://$USER_HOME$/Go/src/github.com/coreos/etcd/.git" />
+      <root url="file://$USER_HOME$/Go/src/github.com/araddon/gou/.git" />
+      <root url="file://$USER_HOME$/Go/src/github.com/coreos/etcd/Godeps/_workspace" />
+      <root url="file://$USER_HOME$/Go/src/github.com/tools/godep/.git" />
+      <root url="file://$USER_HOME$/Go/src/github.com/vulcand/vulcand/.git" />
+      <root url="file://$USER_HOME$/Go/src/github.com/mattbaird/elastigo/.git" />
+      <root url="file://$USER_HOME$/Go/src/gopkg.in/olivere/elastic.v2/.git" />
+      <root url="file://$USER_HOME$/Go/src/github.com/go-martini/martini/.git" />
+      <root url="file://$USER_HOME$/Go/src/github.com/bitly/go-hostpool/.git" />
+      <root url="file://$USER_HOME$/Go/src/github.com/martini-contrib/encoder/.git" />
+    </excluded>
+  </library>
+</component>
